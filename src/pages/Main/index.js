@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
-import { Container, Form, SubmitButton, List } from './styles';
+import Container from '../../components/Container';
+import { Form, SubmitButton, List } from './styles';
 
 export default class Main extends Component {
   state = {
     newRepo: '',
     repositories: [],
-    loading: false,
+    isLoading: false,
   };
 
   // Carregar dados localStorage
@@ -35,9 +36,9 @@ export default class Main extends Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, isLoading } = this.state;
 
-    this.setState({ loading: true });
+    this.setState({ isLoading: true });
 
     const response = await api.get(`repos/${newRepo}`);
 
@@ -48,12 +49,12 @@ export default class Main extends Component {
     this.setState({
       repositories: [...repositories, data],
       newRepo: '',
-      loading: false,
+      isLoading: false,
     });
   };
 
   render() {
-    const { newRepo, loading, repositories } = this.state;
+    const { newRepo, isLoading, repositories } = this.state;
     return (
       <Container>
         <h1>
@@ -69,8 +70,8 @@ export default class Main extends Component {
             onChange={this.handleInputChange}
           />
 
-          <SubmitButton loading={loading}>
-            {loading ? (
+          <SubmitButton isLoading={isLoading}>
+            {isLoading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
               <FaPlus color="#FFF" size={14} />
